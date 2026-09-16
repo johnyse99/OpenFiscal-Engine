@@ -20,6 +20,7 @@
  */
 package com.openfiscal.core.domain;
 
+import java.math.BigInteger;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -29,21 +30,24 @@ import java.util.UUID;
 public class Invoice {
     private final UUID id;
     private InvoiceStatus status;
+    private final Money totalAmount; // Refactored to use Money Value Object
 
-    // The Money value object for totalAmount will be integrated in the next
-    // iteration
-    // to strictly enforce IEEE 754 floating-point safety at the domain level.
-
-    private Invoice(UUID id) {
+    private Invoice(UUID id, Money totalAmount) {
         this.id = Objects.requireNonNull(id, "Invoice ID cannot be null");
+        this.totalAmount = Objects.requireNonNull(totalAmount, "Total amount cannot be null");
         this.status = InvoiceStatus.DRAFT;
     }
 
     /**
      * Factory method to create a new Invoice in DRAFT status.
+     * 
+     * @param totalAmount The strictly typed financial total.
      */
-    public static Invoice createDraft() {
-        return new Invoice(UUID.randomUUID());
+    public static Invoice createDraft(Money totalAmount) {
+        if (totalAmount.getAmount().compareTo(BigInteger.ZERO) < 0) {
+            throw new IllegalArgumentException("Invoice total amount cannot be negative.");
+        }
+        return new Invoice(UUID.randomUUID(), totalAmount);
     }
 
     /**
@@ -65,6 +69,10 @@ public class Invoice {
 
     public InvoiceStatus getStatus() {
         return status;
+    }
+
+    public Money getTotalAmount() {
+        return totalAmount;
     }
 
     public enum InvoiceStatus {
