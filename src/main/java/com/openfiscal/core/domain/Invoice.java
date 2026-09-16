@@ -30,11 +30,15 @@ import java.util.UUID;
 public class Invoice {
     private final UUID id;
     private InvoiceStatus status;
-    private final Money totalAmount; // Refactored to use Money Value Object
+    private final Money totalAmount;
+    private final TaxId issuer;
+    private final TaxId receiver;
 
-    private Invoice(UUID id, Money totalAmount) {
+    private Invoice(UUID id, Money totalAmount, TaxId issuer, TaxId receiver) {
         this.id = Objects.requireNonNull(id, "Invoice ID cannot be null");
         this.totalAmount = Objects.requireNonNull(totalAmount, "Total amount cannot be null");
+        this.issuer = Objects.requireNonNull(issuer, "Issuer TaxId cannot be null");
+        this.receiver = Objects.requireNonNull(receiver, "Receiver TaxId cannot be null");
         this.status = InvoiceStatus.DRAFT;
     }
 
@@ -42,12 +46,17 @@ public class Invoice {
      * Factory method to create a new Invoice in DRAFT status.
      * 
      * @param totalAmount The strictly typed financial total.
+     * @param issuer      The TaxId of the issuing entity.
+     * @param receiver    The TaxId of the receiving entity.
      */
-    public static Invoice createDraft(Money totalAmount) {
+    public static Invoice createDraft(Money totalAmount, TaxId issuer, TaxId receiver) {
         if (totalAmount.getAmount().compareTo(BigInteger.ZERO) < 0) {
             throw new IllegalArgumentException("Invoice total amount cannot be negative.");
         }
-        return new Invoice(UUID.randomUUID(), totalAmount);
+        if (issuer.equals(receiver)) {
+            throw new IllegalArgumentException("Issuer and Receiver cannot have the same Tax ID.");
+        }
+        return new Invoice(UUID.randomUUID(), totalAmount, issuer, receiver);
     }
 
     /**
@@ -73,6 +82,14 @@ public class Invoice {
 
     public Money getTotalAmount() {
         return totalAmount;
+    }
+
+    public TaxId getIssuer() {
+        return issuer;
+    }
+
+    public TaxId getReceiver() {
+        return receiver;
     }
 
     public enum InvoiceStatus {
