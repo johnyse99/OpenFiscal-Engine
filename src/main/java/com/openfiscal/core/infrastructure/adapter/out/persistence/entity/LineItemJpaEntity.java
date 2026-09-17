@@ -25,15 +25,24 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * JPA Entity representing the LineItem domain entity.
+ */
 @Entity
-@Table(name = "invoices")
-public class InvoiceJpaEntity {
+@Table(name = "line_items")
+public class LineItemJpaEntity {
 
     @Id
     private UUID id;
 
-    @Column(name = "status", nullable = false)
-    private String status;
+    @Column(name = "description", nullable = false)
+    private String description;
+
+    @Column(name = "quantity", nullable = false)
+    private int quantity;
+
+    @Column(name = "unit_price_minor", nullable = false)
+    private BigInteger unitPriceMinor;
 
     @Column(name = "total_amount_minor", nullable = false)
     private BigInteger totalAmountMinor;
@@ -41,36 +50,38 @@ public class InvoiceJpaEntity {
     @Column(name = "currency_code", nullable = false, length = 3)
     private String currencyCode;
 
-    @Column(name = "issuer_tax_id", nullable = false)
-    private String issuerTaxId;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "line_item_taxes", joinColumns = @JoinColumn(name = "line_item_id"))
+    private List<TaxJpaEmbeddable> taxes;
 
-    @Column(name = "receiver_tax_id", nullable = false)
-    private String receiverTaxId;
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-    @JoinColumn(name = "invoice_id", nullable = false)
-    private List<LineItemJpaEntity> items;
-
-    protected InvoiceJpaEntity() {
+    protected LineItemJpaEntity() {
     }
 
-    public InvoiceJpaEntity(UUID id, String status, BigInteger totalAmountMinor, String currencyCode,
-            String issuerTaxId, String receiverTaxId, List<LineItemJpaEntity> items) {
+    public LineItemJpaEntity(UUID id, String description, int quantity, BigInteger unitPriceMinor,
+            BigInteger totalAmountMinor, String currencyCode, List<TaxJpaEmbeddable> taxes) {
         this.id = id;
-        this.status = status;
+        this.description = description;
+        this.quantity = quantity;
+        this.unitPriceMinor = unitPriceMinor;
         this.totalAmountMinor = totalAmountMinor;
         this.currencyCode = currencyCode;
-        this.issuerTaxId = issuerTaxId;
-        this.receiverTaxId = receiverTaxId;
-        this.items = items;
+        this.taxes = taxes;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public String getStatus() {
-        return status;
+    public String getDescription() {
+        return description;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public BigInteger getUnitPriceMinor() {
+        return unitPriceMinor;
     }
 
     public BigInteger getTotalAmountMinor() {
@@ -81,15 +92,7 @@ public class InvoiceJpaEntity {
         return currencyCode;
     }
 
-    public String getIssuerTaxId() {
-        return issuerTaxId;
-    }
-
-    public String getReceiverTaxId() {
-        return receiverTaxId;
-    }
-
-    public List<LineItemJpaEntity> getItems() {
-        return items;
+    public List<TaxJpaEmbeddable> getTaxes() {
+        return taxes;
     }
 }
