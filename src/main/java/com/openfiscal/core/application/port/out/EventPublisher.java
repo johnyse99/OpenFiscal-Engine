@@ -20,18 +20,13 @@
  */
 package com.openfiscal.core.application.port.out;
 
-import com.openfiscal.core.domain.Invoice;
-
-import java.util.Optional;
-import java.util.UUID;
+import com.openfiscal.core.domain.events.InvoiceIssuedDomainEvent;
 
 /**
- * Outbound port for Invoice persistence.
- * Infrastructure layer adapters (e.g., PostgreSQL, MongoDB) will implement
- * this.
+ * Outbound port for dispatching Domain Events.
+ * Infrastructure adapters (e.g., Kafka, RabbitMQ, Spring
+ * ApplicationEventPublisher) will implement this.
  */
-public interface InvoiceRepository {
-    void save(Invoice invoice);
-
-    Optional<Invoice> findById(UUID id);
+public interface EventPublisher {
+    void publish(InvoiceIssuedDomainEvent event);
 }
