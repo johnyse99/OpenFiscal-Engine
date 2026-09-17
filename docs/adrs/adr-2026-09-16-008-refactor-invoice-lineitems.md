@@ -4,7 +4,7 @@
 **Status:** Accepted
 **Commit:** feat(core): refactor Invoice aggregate root to encapsulate LineItem collection and auto-calculate totals
 **ADR Number:** adr-2026-09-16-008
-**Deciders:** Lead Architect, Johny Se
+**Deciders:** Lead Architect, Juan S.
 
 ## Context
 
