@@ -22,7 +22,7 @@ Created the `Invoice` class as an Aggregate Root within the `com.openfiscal.core
 
 ## Compliance
 
-This ADR complies with the following IFMP registry invariants:
+This ADR complies with the following OpenFiscal-Engine registry invariants:
 
 | Invariant                        | Verification                                                                                          |
 | -------------------------------- | ----------------------------------------------------------------------------------------------------- |

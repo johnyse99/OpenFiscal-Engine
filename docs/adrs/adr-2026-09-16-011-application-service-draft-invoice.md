@@ -22,7 +22,7 @@ Created the `DraftInvoiceService` and its nested DTO records (`DraftInvoiceComma
 
 ## Compliance
 
-This ADR complies with the following IFMP registry invariants:
+This ADR complies with the following OpenFiscal-Engine registry invariants:
 
 | Invariant                        | Verification                                                                                                                  |
 | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |

@@ -8,7 +8,7 @@
 
 ## Context
 
-The `IssueInvoiceService` orchestrates the transition of an `Invoice` from DRAFT to ISSUED and relies on an `EventPublisher` outbound port to dispatch the `InvoiceIssuedDomainEvent`[cite: 2]. As outlined in our system vision for the PROYECTO ARQUITECTURA HEXAGONAL DDD (E-FAPIAO), we need a robust infrastructure adapter to bridge this pure domain port to an event bus so that secondary Bounded Contexts (Payment, Compliance) can react immediately[cite: 2].
+The `IssueInvoiceService` orchestrates the transition of an `Invoice` from DRAFT to ISSUED and relies on an `EventPublisher` outbound port to dispatch the `InvoiceIssuedDomainEvent`[cite: 2]. As outlined in our system vision for the PROYECTO ARQUITECTURA HEXAGONAL DDD (E-FAPIAO), we need a robust infrastructure adapter to bridge this pure domain port to an event bus so that secondary Bounded Contexts (Payment, Compliance) can react immediately.
 
 ## Decision
 
@@ -16,13 +16,13 @@ Implemented `SpringEventPublisherAdapter` strictly using Spring's `ApplicationEv
 
 ## Consequences
 
-- **Positive:** The Domain and Application layers remain 100% agnostic to Spring's event architecture[cite: 2].
-- **Positive:** Lays the immediate reactive foundation necessary for the financial and auditing modules of the system[cite: 2]. Other modules can now safely use `@EventListener`.
+- **Positive:** The Domain and Application layers remain 100% agnostic to Spring's event architecture.
+- **Positive:** Lays the immediate reactive foundation necessary for the financial and auditing modules of the system. Other modules can now safely use `@EventListener`.
 - **Negative:** Events are currently bound to a single JVM memory space. A Kafka or RabbitMQ adapter implementation will be required when the OpenFiscal Engine is scaled out to a distributed microservices environment.
 
 ## Compliance
 
-This ADR complies with the following IFMP registry invariants:
+This ADR complies with the following OpenFiscal-Engine registry invariants:
 
 | Invariant                        | Verification                                                                                               |
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------- |

@@ -22,7 +22,7 @@ Created the `LineItem` entity within the `com.openfiscal.core.domain` package. I
 
 ## Compliance
 
-This ADR complies with the following IFMP registry invariants:
+This ADR complies with the following OpenFiscal-Engine registry invariants:
 
 | Invariant                        | Verification                                                                                 |
 | -------------------------------- | -------------------------------------------------------------------------------------------- |

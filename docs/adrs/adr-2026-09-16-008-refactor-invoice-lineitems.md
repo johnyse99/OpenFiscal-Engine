@@ -22,7 +22,7 @@ Refactored the `Invoice` class in the `com.openfiscal.core.domain` package to en
 
 ## Compliance
 
-This ADR complies with the following IFMP registry invariants:
+This ADR complies with the following OpenFiscal-Engine registry invariants:
 
 | Invariant                        | Verification                                                                                                                        |
 | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |

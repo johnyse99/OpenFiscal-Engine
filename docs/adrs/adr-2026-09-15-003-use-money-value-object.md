@@ -22,7 +22,7 @@ Created the `Money` Value Object in the `com.openfiscal.core.domain` package. Al
 
 ## Compliance
 
-This ADR complies with the following IFMP registry invariants:
+This ADR complies with the following OpenFiscal-Engine registry invariants:
 
 | Invariant                        | Verification                                                                                                              |
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
