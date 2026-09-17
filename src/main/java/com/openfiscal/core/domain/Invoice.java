@@ -21,6 +21,9 @@
 package com.openfiscal.core.domain;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -33,30 +36,44 @@ public class Invoice {
     private final Money totalAmount;
     private final TaxId issuer;
     private final TaxId receiver;
+    private final List<LineItem> items;
 
-    private Invoice(UUID id, Money totalAmount, TaxId issuer, TaxId receiver) {
+    private Invoice(UUID id, Money totalAmount, TaxId issuer, TaxId receiver, List<LineItem> items) {
         this.id = Objects.requireNonNull(id, "Invoice ID cannot be null");
         this.totalAmount = Objects.requireNonNull(totalAmount, "Total amount cannot be null");
         this.issuer = Objects.requireNonNull(issuer, "Issuer TaxId cannot be null");
         this.receiver = Objects.requireNonNull(receiver, "Receiver TaxId cannot be null");
+        this.items = new ArrayList<>(Objects.requireNonNull(items, "Items list cannot be null"));
         this.status = InvoiceStatus.DRAFT;
     }
 
     /**
      * Factory method to create a new Invoice in DRAFT status.
      * 
-     * @param totalAmount The strictly typed financial total.
-     * @param issuer      The TaxId of the issuing entity.
-     * @param receiver    The TaxId of the receiving entity.
+     * @param issuer   The TaxId of the issuing entity.
+     * @param receiver The TaxId of the receiving entity.
+     * @param items    The list of LineItems. Must contain at least one item.
      */
-    public static Invoice createDraft(Money totalAmount, TaxId issuer, TaxId receiver) {
-        if (totalAmount.getAmount().compareTo(BigInteger.ZERO) < 0) {
-            throw new IllegalArgumentException("Invoice total amount cannot be negative.");
-        }
+    public static Invoice createDraft(TaxId issuer, TaxId receiver, List<LineItem> items) {
         if (issuer.equals(receiver)) {
             throw new IllegalArgumentException("Issuer and Receiver cannot have the same Tax ID.");
         }
-        return new Invoice(UUID.randomUUID(), totalAmount, issuer, receiver);
+        if (items == null || items.isEmpty()) {
+            throw new IllegalArgumentException("Invoice must contain at least one line item.");
+        }
+
+        // Dynamically calculates the total amount using the precise Money Value Object
+        // arithmetic
+        Money calculatedTotal = items.get(0).getTotalAmount();
+        for (int i = 1; i < items.size(); i++) {
+            calculatedTotal = calculatedTotal.add(items.get(i).getTotalAmount());
+        }
+
+        if (calculatedTotal.getAmount().compareTo(BigInteger.ZERO) < 0) {
+            throw new IllegalArgumentException("Invoice total amount cannot be negative.");
+        }
+
+        return new Invoice(UUID.randomUUID(), calculatedTotal, issuer, receiver, items);
     }
 
     /**
@@ -90,6 +107,10 @@ public class Invoice {
 
     public TaxId getReceiver() {
         return receiver;
+    }
+
+    public List<LineItem> getItems() {
+        return Collections.unmodifiableList(items);
     }
 
     public enum InvoiceStatus {
