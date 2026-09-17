@@ -4,18 +4,37 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- Spring Boot Parent to automatically manage compatible dependency versions -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.3.0</version>
+        <relativePath />
+    </parent>
+
     <groupId>org.openfiscal</groupId>
     <artifactId>openfiscal-engine</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
     <properties>
+        <java.version>21</java.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
-        <!-- Add your dependencies here -->
+        <!-- Infrastructure: Persistence Adapters -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
 </project>
