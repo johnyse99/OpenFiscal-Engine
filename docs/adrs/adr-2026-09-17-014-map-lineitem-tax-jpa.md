@@ -3,7 +3,7 @@
 **Date:** 2026-09-17
 **Status:** Accepted
 **Commit:** feat(infra): map LineItem and Tax JPA entities and remove hydration technical debt from persistence adapter
-**ADR Number:** adr-2026-09-17-016
+**ADR Number:** adr-2026-09-17-014
 **Deciders:** Lead Architect, Juan S.
 
 ## Context
@@ -26,7 +26,7 @@ This ADR complies with the following IFMP registry invariants:
 
 | Invariant                        | Verification                                                                                                                           |
 | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| **Number Immutability**          | ADR number `adr-2026-09-17-016` is assigned permanently. Never reused, reassigned, or removed.                                         |
+| **Number Immutability**          | ADR number `adr-2026-09-17-014` is assigned permanently. Never reused, reassigned, or removed.                                         |
 | **Commit Referential Integrity** | Commit field references: `feat(infra): map LineItem and Tax JPA entities and remove hydration technical debt from persistence adapter` |
 | **Structural Completeness**      | All required sections (Context, Decision, Consequences, Compliance) are present.                                                       |
 | **Status Lifecycle**             | Current status: `Accepted`. Valid transitions: Proposed → Accepted / Rejected / Deprecated.                                            |
