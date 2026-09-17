@@ -20,11 +20,15 @@
  */
 package com.openfiscal.core.domain;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
 /**
- * Entity representing a single row in an Invoice.
+ * Entity representing a single row in an Invoice, now supporting itemized
+ * fiscal charges.
  */
 public class LineItem {
     private final UUID id;
@@ -32,8 +36,9 @@ public class LineItem {
     private final int quantity;
     private final Money unitPrice;
     private final Money totalAmount;
+    private final List<Tax> taxes;
 
-    private LineItem(UUID id, String description, int quantity, Money unitPrice) {
+    private LineItem(UUID id, String description, int quantity, Money unitPrice, List<Tax> taxes) {
         this.id = Objects.requireNonNull(id, "LineItem ID cannot be null");
         this.description = Objects.requireNonNull(description, "Description cannot be null").trim();
 
@@ -46,20 +51,23 @@ public class LineItem {
 
         this.quantity = quantity;
         this.unitPrice = Objects.requireNonNull(unitPrice, "Unit price cannot be null");
-        // Calculates the total amount for this row natively using the Money Value
+        this.taxes = new ArrayList<>(Objects.requireNonNull(taxes, "Taxes list cannot be null"));
+
+        // Calculates the base total amount for this row natively using the Money Value
         // Object
         this.totalAmount = unitPrice.multiply(quantity);
     }
 
     /**
-     * Factory method to create a new LineItem.
+     * Factory method to create a new LineItem with fiscal charges.
      * 
      * @param description The commercial description of the good or service.
      * @param quantity    The amount of units (must be greater than zero).
      * @param unitPrice   The strictly typed financial cost per unit.
+     * @param taxes       The list of Tax Value Objects applied to this line item.
      */
-    public static LineItem create(String description, int quantity, Money unitPrice) {
-        return new LineItem(UUID.randomUUID(), description, quantity, unitPrice);
+    public static LineItem create(String description, int quantity, Money unitPrice, List<Tax> taxes) {
+        return new LineItem(UUID.randomUUID(), description, quantity, unitPrice, taxes);
     }
 
     public UUID getId() {
@@ -80,5 +88,9 @@ public class LineItem {
 
     public Money getTotalAmount() {
         return totalAmount;
+    }
+
+    public List<Tax> getTaxes() {
+        return Collections.unmodifiableList(taxes);
     }
 }
