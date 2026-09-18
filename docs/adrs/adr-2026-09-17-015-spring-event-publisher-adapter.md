@@ -24,11 +24,11 @@ Implemented `SpringEventPublisherAdapter` strictly using Spring's `ApplicationEv
 
 This ADR complies with the following OpenFiscal-Engine registry invariants:
 
-| Invariant                        | Verification                                                                                               |
-| -------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| **Number Immutability**          | ADR number `adr-2026-09-17-015` is assigned permanently. Never reused, reassigned, or removed.             |
-| **Commit Referential Integrity** | Commit field references: `feat(infra): implement SpringEventPublisherAdapter to dispatch domain events...` |
-| **Structural Completeness**      | All required sections (Context, Decision, Consequences, Compliance) are present.                           |
-| **Status Lifecycle**             | Current status: `Accepted`. Valid transitions: Proposed → Accepted / Rejected / Deprecated.                |
+| Invariant                        | Verification                                                                                                                           |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| **Number Immutability**          | ADR number `adr-2026-09-17-015` is assigned permanently. Never reused, reassigned, or removed.                                         |
+| **Commit Referential Integrity** | Commit field references: `feat(infra): implement SpringEventPublisherAdapter to dispatch domain events and close out issuing use case` |
+| **Structural Completeness**      | All required sections (Context, Decision, Consequences, Compliance) are present.                                                       |
+| **Status Lifecycle**             | Current status: `Accepted`. Valid transitions: Proposed → Accepted / Rejected / Deprecated.                                            |
 
 **Supersedes:** None
