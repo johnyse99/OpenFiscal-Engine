@@ -27,47 +27,43 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * Entity representing a single row in an Invoice, now supporting itemized
- * fiscal charges.
+ * Entity representing a single row within an Invoice.
  */
 public class LineItem {
     private final UUID id;
     private final String description;
     private final int quantity;
     private final Money unitPrice;
-    private final Money totalAmount;
     private final List<Tax> taxes;
+    private final Money totalAmount;
 
-    private LineItem(UUID id, String description, int quantity, Money unitPrice, List<Tax> taxes) {
-        this.id = Objects.requireNonNull(id, "LineItem ID cannot be null");
-        this.description = Objects.requireNonNull(description, "Description cannot be null").trim();
-
-        if (this.description.isEmpty()) {
-            throw new IllegalArgumentException("Description cannot be empty");
-        }
-        if (quantity <= 0) {
-            throw new IllegalArgumentException("Quantity must be greater than zero");
-        }
-
+    private LineItem(UUID id, String description, int quantity, Money unitPrice, List<Tax> taxes, Money totalAmount) {
+        this.id = Objects.requireNonNull(id, "ID cannot be null");
+        this.description = Objects.requireNonNull(description, "Description cannot be null");
         this.quantity = quantity;
         this.unitPrice = Objects.requireNonNull(unitPrice, "Unit price cannot be null");
         this.taxes = new ArrayList<>(Objects.requireNonNull(taxes, "Taxes list cannot be null"));
-
-        // Calculates the base total amount for this row natively using the Money Value
-        // Object
-        this.totalAmount = unitPrice.multiply(quantity);
+        this.totalAmount = Objects.requireNonNull(totalAmount, "Total amount cannot be null");
     }
 
-    /**
-     * Factory method to create a new LineItem with fiscal charges.
-     * 
-     * @param description The commercial description of the good or service.
-     * @param quantity    The amount of units (must be greater than zero).
-     * @param unitPrice   The strictly typed financial cost per unit.
-     * @param taxes       The list of Tax Value Objects applied to this line item.
-     */
     public static LineItem create(String description, int quantity, Money unitPrice, List<Tax> taxes) {
-        return new LineItem(UUID.randomUUID(), description, quantity, unitPrice, taxes);
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Quantity must be strictly positive.");
+        }
+
+        // 1. Calculate base amount (Quantity * Unit Price)
+        Money calculatedTotal = unitPrice.multiply(quantity);
+
+        // 2. Add all tax amounts to the total
+        if (taxes != null) {
+            for (Tax tax : taxes) {
+                calculatedTotal = calculatedTotal.add(tax.getAmount());
+            }
+        } else {
+            taxes = Collections.emptyList();
+        }
+
+        return new LineItem(UUID.randomUUID(), description, quantity, unitPrice, taxes, calculatedTotal);
     }
 
     public UUID getId() {
@@ -86,11 +82,11 @@ public class LineItem {
         return unitPrice;
     }
 
-    public Money getTotalAmount() {
-        return totalAmount;
-    }
-
     public List<Tax> getTaxes() {
         return Collections.unmodifiableList(taxes);
+    }
+
+    public Money getTotalAmount() {
+        return totalAmount;
     }
 }
