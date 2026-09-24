@@ -42,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@WithMockUser // Inyecta un usuario autenticado simulado para eludir el 401 en las pruebas
+@WithMockUser // Inject a simulated authenticated user to bypass the 401 error in tests
 class InvoiceControllerIntegrationTest {
 
     @Autowired
